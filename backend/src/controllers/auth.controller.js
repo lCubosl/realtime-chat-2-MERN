@@ -120,7 +120,7 @@ export async function onboard(req, res) {
           !nativeLanguage && "nativeLanguage",
           !learningLanguage && "learningLanguage",
           !location && "location",
-        ],
+        ].filter(Boolean),
       })
     }
 
@@ -133,6 +133,18 @@ export async function onboard(req, res) {
       return res.status(404).json({message:"User not found"})
     }
     
+    try {
+      await upsertStreamUser({
+        id: updatedUser._id.toString(),
+        name: updatedUser.fullName,
+        image: updatedUser.profilePic || ""
+      })
+
+      console.log(`Stream user updated after onboarding for ${updatedUser.fullName}`)
+    } catch (streamError) {
+      console.log("Error updating Stream user during onboarding:", streamError.message)      
+    }
+
     res.status(200).json({success:true, user:updatedUser})
   } catch (error) {
     console.log("Onboarding Error", error)
