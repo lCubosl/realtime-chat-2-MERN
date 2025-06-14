@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { login } from "../lib/api"
 
 const useLogin = () => {
-  const QueryClient = useQueryClient
+  const QueryClient = useQueryClient()
 
   const {mutate, isPending, error} = useMutation({
     mutationFn:login,
